@@ -1,0 +1,73 @@
+#num9proj.py
+
+
+# to solve for the pythagorean triple of 1000,  I will be using a^2+b^2=c^2
+# c= a+b
+# logically, a and b are likely not larger than 1000, I will start by creating a range from 1 to 1000 and set a and b equal to it
+#only thing is that if a increases by 1, b must decrease by one, but always, a+b must equal c
+import numpy as nu
+
+def numberavailible():
+    x=0
+    y=0
+    print(x)
+    while x<1000:
+        print('################################################################################################')
+        print('num x here:')
+        print(x)
+        x=x+1
+        y=0
+        while y<1000:
+            print('########################')
+            print('num y here:')
+            print(y)
+            y=y+1
+            add=x+y
+            print('summmmmm')
+            print(add)
+            
+            print('')
+            print('current runtime is:'+str(x))
+            if add==1000:
+                solist=[]
+                print('solution found?')
+                print('here is x')
+                print(x)
+                print(' ')
+                print('here is y')
+                print(y)
+                solist.append(x)
+                solist.append(y)
+                print('solist: '+str(solist))
+                print('')
+                # if the addition of the squares equals a numer which can be rooted and added to a and b to get to 100, it will be correct
+                testpowerofx=x**2
+                testpowerofy=y**2
+                added=nu.add(testpowerofx,testpowerofy)
+                print('here is testpowerofx: '+str(testpowerofx))
+                print('here is testpowerofy: '+str(testpowerofy))
+                print('here is their sum: '+str(added))
+                
+                rootnum=x**2+y**2
+                print('here is rootnum: '+str(rootnum))
+                print('rootnum inputs are: '+'x: '+str(x)+' y:'+str(y))
+                testexp=nu.sqrt(rootnum)
+                print('squareroot of the rootnum is: '+str(testexp))
+                thousandmb=testexp+rootnum
+                print('here is mb thousand: '+str(thousandmb))
+                quit()
+
+            #     if thousandmb== 1000:
+            #         print('success!!!!')
+            #         print('here is x')
+            #         print(x)
+            #         print('')
+            #         print('here is y')
+            #         print(y)
+            #         print('')
+            #         print('here is the square (before ^2)')
+            #         print(routnum)
+            #         quit()
+
+
+numberavailible()
