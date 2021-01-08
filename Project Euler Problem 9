@@ -6,10 +6,13 @@
 # logically, a and b are likely not larger than 1000, I will start by creating a range from 1 to 1000 and set a and b equal to it
 #only thing is that if a increases by 1, b must decrease by one, but always, a+b must equal c
 import numpy as nu
-
+import time
+import threading
+#to introduce multi-threading, I have to create multiple fuctions to run on different threads, It will require a complete redesign, and is below
 def numberavailible():
     x=0
     y=0
+    z=0
     print(x)
     while x<1000:
         print('################################################################################################')
@@ -22,40 +25,51 @@ def numberavailible():
             print('num y here:')
             print(y)
             y=y+1
-            add=x+y
-            print('summmmmm')
-            print(add)
             
             print('')
             print('current runtime is:'+str(x))
-            if add==1000:
-                solist=[]
-                print('solution found?')
-                print('here is x')
-                print(x)
-                print(' ')
-                print('here is y')
-                print(y)
-                solist.append(x)
-                solist.append(y)
-                print('solist: '+str(solist))
-                print('')
-                # if the addition of the squares equals a numer which can be rooted and added to a and b to get to 100, it will be correct
-                testpowerofx=x**2
-                testpowerofy=y**2
-                added=nu.add(testpowerofx,testpowerofy)
-                print('here is testpowerofx: '+str(testpowerofx))
-                print('here is testpowerofy: '+str(testpowerofy))
-                print('here is their sum: '+str(added))
+            while z<1000:
+                print('################################################')
+                print('z num here:')
+                print(z)
+                z=z+1
+
+            if z**2==x**+y**2:
+                print('possible solution')
+                if z+x+y==1000:
+                    print('here is x: '+str(x))
+                    print('here is y: '+str(y))
+                    print('here is z: '+str(z))
+                    print('here is the answer')
+            
+            # if add==1000:
+            #     solist=[]
+            #     print('solution found?')
+            #     print('here is x')
+            #     print(x)
+            #     print(' ')
+            #     print('here is y')
+            #     print(y)
+            #     solist.append(x)
+            #     solist.append(y)
+            #     print('solist: '+str(solist))
+            #     print('')
+            #     # if the addition of the squares equals a numer which can be rooted and added to a and b to get to 100, it will be correct
+            #     testpowerofx=x**2
+            #     testpowerofy=y**2
+            #     added=nu.add(testpowerofx,testpowerofy)
+            #     print('here is testpowerofx: '+str(testpowerofx))
+            #     print('here is testpowerofy: '+str(testpowerofy))
+            #     print('here is their sum: '+str(added))
                 
-                rootnum=x**2+y**2
-                print('here is rootnum: '+str(rootnum))
-                print('rootnum inputs are: '+'x: '+str(x)+' y:'+str(y))
-                testexp=nu.sqrt(rootnum)
-                print('squareroot of the rootnum is: '+str(testexp))
-                thousandmb=testexp+rootnum
-                print('here is mb thousand: '+str(thousandmb))
-                quit()
+            #     rootnum=x**2+y**2
+            #     print('here is rootnum: '+str(rootnum))
+            #     print('rootnum inputs are: '+'x: '+str(x)+' y:'+str(y))
+            #     testexp=nu.sqrt(rootnum)
+            #     print('squareroot of the rootnum is: '+str(testexp))
+            #     thousandmb=testexp+rootnum
+            #     print('here is mb thousand: '+str(thousandmb))
+            #     quit()
 
             #     if thousandmb== 1000:
             #         print('success!!!!')
@@ -68,6 +82,45 @@ def numberavailible():
             #         print('here is the square (before ^2)')
             #         print(routnum)
             #         quit()
+# numberavailible()
 
 
-numberavailible()
+# here I will write out multiple fuctions to be executed at once
+#the guide I am learnign from is availible at this URL https://www.youtube.com/watch?reload=9&v=PJ4t2U15ACo&ab_channel=codebasics
+# the syntax to perform an operation is below 
+#t1=threading.Thread(target=*enter function name*, args=(*enter arguments here*))
+#t1.start() this will initiate the calculation
+#t2.start()
+#t1.join() this will in one way or another, return the results from the operation and wait until the other thread has finished, once they 
+#have finished, they will share information, 
+#t2.join()
+
+
+
+def test_one():
+        
+        x=999999
+        while x>0:
+            # print('################################################################################################')
+            # print('num x here:')
+            print(x)
+            x=x-1
+
+def test_two():
+        y=0
+        while y<1000000:
+            print(y)
+            y=y+1
+
+t1=threading.Thread(target=test_one, args=())
+t2=threading.Thread(target=test_two, args=())
+t1.start() 
+t2.start()
+t1.join()
+t2.join()
+t=time.time()
+print('took this long: '+str(t))
+# In total, if I calculate every possible combination, I will conduct 1 around 1 billion processes 
+#if I can complete one set of processes, say 1,000 combinations of x and y, after the first 1,000, i can export them to a different core
+#i can work on the first set of x(range(1-1000))^2+y(1)^2, while i calculate the combinations between x(range1-1000)and y(2)
+
