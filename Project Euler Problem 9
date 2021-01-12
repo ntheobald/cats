@@ -8,6 +8,8 @@
 import numpy as nu
 import time
 import threading
+import queue
+q = queue.Queue()
 #to introduce multi-threading, I have to create multiple fuctions to run on different threads, It will require a complete redesign, and is below
 def numberavailible():
     x=0
@@ -97,30 +99,119 @@ def numberavailible():
 
 
 
-def test_one():
+# def test_one():
         
-        x=999999
-        while x>0:
-            # print('################################################################################################')
-            # print('num x here:')
-            print(x)
-            x=x-1
+#         x=999999
+#         while x>0:
+#             # print('################################################################################################')
+#             # print('num x here:')
+#             print(x)
+#             x=x-1
 
-def test_two():
-        y=0
-        while y<1000000:
-            print(y)
-            y=y+1
+# def test_two():
+#         y=0
+#         while y<1000000:
+#             print(y)
+#             y=y+1
 
-t1=threading.Thread(target=test_one, args=())
-t2=threading.Thread(target=test_two, args=())
-t1.start() 
-t2.start()
-t1.join()
-t2.join()
-t=time.time()
-print('took this long: '+str(t))
+# t1=threading.Thread(target=test_one, args=())
+# t2=threading.Thread(target=test_two, args=())
+# t1.start() 
+# t2.start()
+# t1.join()
+# t2.join()
+# t=time.time()
+# print('took this long: '+str(t))
 # In total, if I calculate every possible combination, I will conduct 1 around 1 billion processes 
 #if I can complete one set of processes, say 1,000 combinations of x and y, after the first 1,000, i can export them to a different core
 #i can work on the first set of x(range(1-1000))^2+y(1)^2, while i calculate the combinations between x(range1-1000)and y(2)
 
+#reffer to https://nitratine.net/blog/post/python-threading-basics/ for more info on threading and passing args
+#here is how you implement queues to share variables across threads (returning does not work) https://stackoverflow.com/questions/15461413/how-to-share-a-variable-between-2-threads 
+# https://docs.python.org/3/library/asyncio-queue.html - queue module in python
+
+
+def t1_step1():
+        T1x=0
+        while T1x<250:
+            T1x=T1x+1
+            T1y=0 
+            while T1y<1000:
+                T1y=T1y+1
+                print('t1x')
+                print(T1x)
+                print(T1y)
+                q.put(T1x)
+                t1.join()
+                # T1x=q.get()
+                # T1y=q.get()
+                
+
+
+# def t2_step1():
+#         T2x=251
+#         while T2x<500:
+#             T2x=T2x+1
+#             T2y=0
+#             while T2y<1000:
+#                 T2y=T2y+1
+#                 print('t2x')
+#                 print(T2x)
+#                 print(T2y)
+
+
+# def t3_step1():
+#         T3x=501
+#         while T3x<750:
+#             T3x=T3x+1
+#             T3y=0
+#             while T3y<1000:
+#                 T3y=T3y+1
+#                 print('t3x')
+#                 print(T3x)
+#                 print(T3y)
+
+# def t4_step1():
+#         T4x=751
+#         while T4x<1000:
+#             T4x=T4x+1
+#             T4y=0
+#             while T4y<1000:
+#                 T4y=T4y+1
+#                 print('t4x')
+#                 print(T4x)
+#                 print(T4y)
+
+
+
+def t5_step2():
+    T1x=q.put(T1x)
+    q.empty()
+    print('second process: '+str(T1x))
+    t5.join()
+
+
+
+# t2=threading.Thread(target=t2_step1, args=())
+# t3=threading.Thread(target=t3_step1, args=())
+# t4=threading.Thread(target=t4_step1, args=())
+
+# T1x=0
+
+t1=threading.Thread(target=t1_step1, args=())
+t1.start()
+t5=threading.Thread(target=t5_step2, args=()) 
+t5.start()
+# t1.join()
+# t5.join()
+
+
+# t2.start()
+# t3.start()
+# t4.start()
+
+
+
+# t2.join()
+# t3.join()
+# t4.join()
