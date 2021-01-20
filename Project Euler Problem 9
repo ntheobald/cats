@@ -228,43 +228,63 @@ t5.start()
 from queue import Queue 
 from threading import Thread 
   
-# A thread that produces data 
-
-
-#will only be for thread1, including T1x
 def producer(out_q): 
-    while True: 
-        T1x=0
-        
-        while T1x<10:
-            T1y=0      
-            while T1y<50:
-                T1y=T1y+1
-                data=T1y
-                out_q.put(data) 
-            T1x=T1x+1
-            T1y=0
-            data=T1x
-            print('here is T1x: '+str(T1x))
-            out_q.put(data)
-        return False
+    T1x=0
+    while T1x<100: 
+        T1y=0      
+        while T1y<100:
+            T1y=T1y+1
+            # data=T1y
+            entrence=[]
+            entrence.append(T1x)
+            entrence.append(T1y)
+            out_q.put(entrence)
+            # out_q.put(T1y) 
+        T1x=T1x+1
+        # print('here is T1x: '+str(T1x))
+        # out_q.put(T1x)
+        # c='see!?'
+        # out_d.put(c)
+        # return False
+    reg=False
+    out_q.put(reg)
+    quit()
+          
           
 # A thread that consumes data 
-def consumer(in_q): 
+def processor(in_q,out_r): 
     while True: 
         # Get some data 
         # Process the data 
-        for i in range(250):
-            # print('doin smth')
-            data = in_q.get() 
-            print('here is my data:'+str(data))
-        quit()
+        randname = in_q.get() 
+        # cat=in_d.get()
+
+        if randname==False:
+            quit()
+        
+        print('###################### here is my data:'+str(randname))
+        ls=15
+        out_r.put(ls)
+        # print('see this?:'+str(cat))
+        
+        # T1x=in_q.get()
+        # print('################################################################## here is my data:'+str(T1x))
+        
+def sqr(in_r):
+    while True:
+        ls=in_r.get()
+        print('here is my ls, it will be square rooted!: '+str(ls))
 
           
 # Create the shared queue and launch both threads 
 q = Queue() 
+r= Queue()
 
 t1 = Thread(target = producer, args =(q,)) 
-t2 = Thread(target = consumer, args =(q,)) 
+t2 = Thread(target = processor, args =(q,r))
+t3 = Thread(target = sqr, args =(r,))
+
 t1.start() 
 t2.start() 
+t3.start()
+
