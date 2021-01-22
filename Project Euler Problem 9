@@ -225,14 +225,21 @@ t5.start()
 
 #the code outline was sourced by:https://www.geeksforgeeks.org/python-communicating-between-threads-set-1/ 
 
+import sys
+import numpy as np
 from queue import Queue 
 from threading import Thread 
+global reg
   
-def producer(out_q): 
+# A thread that produces data 
+
+
+#will only be for thread1, including T1x
+def producer(out_q,n): 
     T1x=0
-    while T1x<100: 
+    while T1x<n: 
         T1y=0      
-        while T1y<100:
+        while T1y<n:
             T1y=T1y+1
             # data=T1y
             entrence=[]
@@ -250,19 +257,40 @@ def producer(out_q):
     out_q.put(reg)
     quit()
           
-          
+
 # A thread that consumes data 
-def processor(in_q,out_r): 
+def processor(in_q,out_r,obj): 
+    timing=0
     while True: 
         # Get some data 
         # Process the data 
-        randname = in_q.get() 
+        lisst = in_q.get() 
         # cat=in_d.get()
 
-        if randname==False:
+        if lisst==False:
             quit()
         
-        print('###################### here is my data:'+str(randname))
+        # print('###################### here is my data:'+str(lisst))
+        T1x=lisst[0]
+        T1y=lisst[-1]
+        T1xs=T1x**2
+        T1ys=T1y**2
+        T1xy=T1xs+T1ys
+        T1z=np.sqrt(T1xy)
+        T1xyz=T1x+T1y+T1z
+        # print('#######################################################')
+        # print('here is x: '+str(T1x)+' here is y: '+str(T1y)+' here is z: '+str(T1z))
+        # print('here is the triple result: '+str(T1xyz))
+        if T1xyz==obj and T1x<T1y and T1y<T1z:
+            print('ended here; match found')
+            timing=timing+1
+            print('here is x: '+str(T1x)+' here is y: '+str(T1y)+' here is z: '+str(T1z))
+            print('here is the triple result: '+str(T1xyz))
+            sys.exit('finished!')
+            if timing==2:
+                print('cool')
+                
+                
         ls=15
         out_r.put(ls)
         # print('see this?:'+str(cat))
@@ -273,15 +301,15 @@ def processor(in_q,out_r):
 def sqr(in_r):
     while True:
         ls=in_r.get()
-        print('here is my ls, it will be square rooted!: '+str(ls))
+        # print('here is my ls, it will be square rooted!: '+str(ls))
 
           
 # Create the shared queue and launch both threads 
 q = Queue() 
 r= Queue()
 
-t1 = Thread(target = producer, args =(q,)) 
-t2 = Thread(target = processor, args =(q,r))
+t1 = Thread(target = producer, args =(q,1000)) 
+t2 = Thread(target = processor, args =(q,r,1000))
 t3 = Thread(target = sqr, args =(r,))
 
 t1.start() 
